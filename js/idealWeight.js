@@ -1,23 +1,29 @@
 function calculateIdealWeight() {
-    const height = parseFloat(document.getElementById("height").value);
-    const weight = parseFloat(document.getElementById("weight").value);
+    // Ambil input dari pengguna
+    const height = parseFloat(document.getElementById("height").value); // Tinggi badan (cm)
+    const weight = parseFloat(document.getElementById("weight").value); // Berat badan (kg)
+    const age = parseInt(document.getElementById("age").value); // Umur
+    const gender = document.querySelector('input[name="gender"]:checked').value; // Jenis kelamin
 
     // Validasi input
-    if (!height || !weight || height <= 0 || weight <= 0) {
-        document.getElementById("result").innerText = "Please enter valid inputs.";
+    if (isNaN(height) || isNaN(weight) || isNaN(age)) {
+        alert("Please provide valid inputs!");
         return;
     }
 
+    // Rumus Broca untuk berat badan ideal
     let idealWeight;
-
-    // Hitung BBI berdasarkan tinggi badan
-    if (height >= 150) {
-        idealWeight = (height - 100);}
-
-    // Cek apakah berat badan ideal
-    if (Math.abs(weight - idealWeight) <= 2) {
-        document.getElementById("result").innerText = `Congratulation ! Your weight is ideal! Your ideal weight is approximately ${idealWeight.toFixed(2)} kg.`;
-    } else {
-        document.getElementById("result").innerText = `Sorry your weight is not ideal. Your ideal weight should be around ${idealWeight.toFixed(2)} kg.`;
+    if (gender === "male") {
+        idealWeight = (height - 100) - ((height - 100) * 0.1);
+    } else if (gender === "female") {
+        idealWeight = (height - 100) - ((height - 100) * 0.15);
     }
+
+    // Bandingkan berat badan dengan berat badan ideal
+    const message = weight >= (idealWeight - 2) && weight <= (idealWeight + 2)
+        ? `Congratulation! Your weight is ideal! Your ideal weight is approximately ${idealWeight.toFixed(2)} kg.`
+        : `Sorry, your weight is not ideal. Your ideal weight should be around ${idealWeight.toFixed(2)} kg.`;
+
+    // Tampilkan hasil
+    document.getElementById("result").innerText = message;
 }
